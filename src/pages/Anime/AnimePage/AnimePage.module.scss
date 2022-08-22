@@ -1,0 +1,34 @@
+.animeWrapper {
+
+    div,
+    h1,
+    h2,
+    h3,
+    h5,
+    h6,
+    span,
+    p {
+        color: white;
+    }
+}
+
+.divider {
+    padding: 0;
+    margin: 0;
+    border: 1px black solid;
+    color: black;
+}
+
+.animeContainer {
+    span {
+        width: 100%;
+        display: block;
+    }
+}
+
+.animePlayerWrapper {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    text-align: center;
+}

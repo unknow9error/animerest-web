@@ -1,0 +1,13 @@
+.floatedButton {
+    position: absolute !important;
+    bottom: 10px;
+    right: 10px;
+    z-index: 9999999999999;
+    border-radius: 40px;
+
+    background: transparent !important;
+    
+    span {
+        color: #40a9ff;
+    }
+}
