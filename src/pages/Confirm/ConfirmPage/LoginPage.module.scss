@@ -1,0 +1,24 @@
+.loginPageRow {
+    width: 100vw;
+    height: 100vh;
+
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.loginPageCol {
+    background-color: rgba($color: #dbdbdb, $alpha: 0.4);
+    height: max-content;
+    padding: 30px;
+
+    h1 {
+        text-align: center;
+    }
+
+    input,
+    span {
+        background: transparent;
+    }
+}

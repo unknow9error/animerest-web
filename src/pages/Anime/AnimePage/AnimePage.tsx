@@ -35,9 +35,9 @@ const AnimePage: FC = () => {
                     <Row
                         justify="center"
                     >
-                        <Col span={13}>
+                        <Col span={14}>
                             <Row
-                                gutter={[50, 0]}
+                                gutter={[50, 10]}
                                 className={styles.animeWrapper}
                             >
                                 <Col
@@ -88,6 +88,7 @@ const AnimePage: FC = () => {
                                     className={styles.animePlayerWrapper}
                                 >
                                     <Player
+                                        activeSerie={activeSerie}
                                         poster={data.player.playlist[activeSerie].preview}
                                         videoQuality={data.player.playlist[activeSerie].hls}
                                         series={{

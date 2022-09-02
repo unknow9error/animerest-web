@@ -1,0 +1,42 @@
+.headerLayout {
+    background: transparent !important;
+
+    div,
+    header,
+    ul,
+    :hover,
+    :active,
+    :focus,
+    li {
+        background: transparent !important;
+    }
+
+    ul {
+        width: min-content !important;
+    }
+
+    header {
+        position: relative;
+    }
+}
+
+.headerDivider {
+    padding: 0 !important;
+    margin: 0 !important;
+    border-top: 1px solid rgb(255 255 255 / 10%) !important;
+}
+
+.headerSearch {
+    position: absolute !important;
+    color: white !important;
+    top: 15px;
+    right: 0%;
+    width: 15vw;
+
+    // width: 84%;
+    
+    // >span>div {
+    //     float: right;
+    //     width: 10vw;
+    // }
+}

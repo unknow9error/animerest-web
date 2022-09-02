@@ -1,0 +1,23 @@
+.tabsWrapper {
+    // background-color: rgba($color: #dadadada, $alpha: 0.5);
+    height: 40vh;
+    overflow: auto;
+    margin: 50px;
+    margin-top: 0 !important;
+
+    >div {
+        display: flex;
+        flex-direction: column;
+
+        label,
+        label:hover,
+        label:active {
+            height: 100%;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            color: white;
+            border: transparent !important;
+            background: transparent !important;
+        }
+    }
+}

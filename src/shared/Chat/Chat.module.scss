@@ -1,0 +1,11 @@
+.chatContainer {
+    position: fixed;
+    bottom: 5vh;
+    right: 5vw;
+    z-index: 9999999999;
+    
+    button {
+        cursor: pointer !important;
+        border-radius: 50% !important;
+    }
+}

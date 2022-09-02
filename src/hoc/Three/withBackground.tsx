@@ -21,7 +21,15 @@ const WithBackground: FC<{ Component: FC }> = ({ Component }) => {
     }
 
     return (
-        <div className={styles.backgroundWrapper}>
+        <div
+            // className={styles.backgroundWrapper}
+            // style={{
+            //     backgroundImage: `url(${three.image})`,
+            //     backgroundRepeat: "no-repeat",
+            //     backgroundPosition: "center top",
+            //     backgroundSize: "cover"
+            // }}
+        >
             {three.is3D ?
                 <ThreeBackground
                     image={three.image}
@@ -32,7 +40,7 @@ const WithBackground: FC<{ Component: FC }> = ({ Component }) => {
                 :
                 <Component key={key} />
             }
-            <ThreeButton is3D={three.is3D} onClick={handleButtonClick} />
+            {/* <ThreeButton is3D={three.is3D} onClick={handleButtonClick} /> */}
         </div>
     )
 }

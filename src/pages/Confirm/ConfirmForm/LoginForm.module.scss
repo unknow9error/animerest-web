@@ -1,0 +1,17 @@
+.loginBtn {
+    width: 100%;
+}
+
+.googleLoginBtn {
+    cursor: no-drop;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    iframe {
+        pointer-events: none;
+        width: min-content !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}

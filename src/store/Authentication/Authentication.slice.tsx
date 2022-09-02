@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getCookie } from 'src/services/Cookie/Cookie.service';
 
 export interface AuthenticationState {
     isAuth: boolean;
@@ -12,11 +13,11 @@ export const authenticationSlice = createSlice({
     name: "authentication",
     initialState,
     reducers: {
-        register: (state) => {
-            
+        checkAuth: (state) => {
+            state.isAuth = Boolean(getCookie('token'));
         },
-        login: () => {
-
-        }    
     }
 })
+
+export const { checkAuth } = authenticationSlice.actions;
+export default authenticationSlice.reducer;

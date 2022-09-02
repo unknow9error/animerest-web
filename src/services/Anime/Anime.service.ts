@@ -1,7 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { AnilibriaAnimeVm, BaseResponseVM } from "src/models";
+import { AnimeActionVm, AnimeSearchTitleVm } from "src/models/Anime/Anime.model";
 import { BasePaginationRequest } from "src/models/Base/Base.model";
 import { AnimeApiConstants } from "src/utils/constants/api.constants";
+import { getCookie } from "../Cookie/Cookie.service";
 
 export const animeService = createApi({
     reducerPath: "animeService",
@@ -14,11 +16,32 @@ export const animeService = createApi({
         getById: builder.query<AnilibriaAnimeVm, number | string>({
             query: (animeId) => AnimeApiConstants.GETBYID + `?id=${animeId}`,
             transformResponse: ({ data }: BaseResponseVM<AnilibriaAnimeVm>) => data
+        }),
+        getGenres: builder.query<string[], null>({
+            query: () => AnimeApiConstants.GENRES,
+            transformResponse: ({ data }: BaseResponseVM<string[]>) => data
+        }),
+        action: builder.mutation<any, AnimeActionVm>({
+            query: (query) => ({
+                url: AnimeApiConstants.ACTION + `/${query.action}`,
+                body: query,
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${getCookie('token')}`
+                }
+            }),
+        }),
+        search: builder.query<AnilibriaAnimeVm[], AnimeSearchTitleVm>({
+            query: (query) => AnimeApiConstants.SEARCH + `?${Object.keys(query).map((x, index) => `${x}=${query[x as keyof typeof query]}${index < (Object.keys(query).length - 1) ? "&" : ""}`)}`,
+            transformResponse: ({ data }: BaseResponseVM<AnilibriaAnimeVm[]>) => data
         })
-    })
+    }),
 });
 
 export const {
     useLazyGetListQuery,
-    useLazyGetByIdQuery
+    useLazyGetByIdQuery,
+    useLazySearchQuery,
+    useLazyGetGenresQuery,
+    useActionMutation,
 } = animeService;

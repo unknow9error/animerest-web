@@ -1,17 +1,26 @@
 .playerWrapper {
-    >div {
-        width: 100%;
-        height: 100%;
+    position: relative;
 
-        :last-child {}
+    >:first-child {
+        width: 100% !important;
+        height: 100% !important;
     }
 }
 
-.playerSeriesContainer {
-    display: flex;
-    overflow: auto;
+.playerMotionSeries {
     width: 100%;
-    
+    height: min-content;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.playerSeriesContainer {
+    overflow: auto;
+    display: flex;
+    flex-flow: nowrap !important;
+    width: 100%;
+
     >div {
         cursor: pointer;
         display: flex;
@@ -20,8 +29,12 @@
         background: rgba($color: #dadadada, $alpha: 0.4);
         border: 1px rgba($color: #6d6d6dda, $alpha: 1) solid;
         height: 50px;
-        width: 15%;
+        width: 300px;
     }
+}
+
+.activeSerie {
+    background: rgba($color: #85a1fc, $alpha: 1.0) !important;
 }
 
 .playerSeriesContainer::-webkit-scrollbar {

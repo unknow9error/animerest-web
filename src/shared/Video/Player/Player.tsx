@@ -4,7 +4,7 @@ import styles from './Player.module.scss';
 import { motion } from 'framer-motion';
 import { Col, Row } from "antd";
 
-interface PlayerProps {
+export interface PlayerProps {
     poster?: string;
     url?: string;
     videoQuality?: {
@@ -16,7 +16,8 @@ interface PlayerProps {
         start?: number;
         end?: number;
     };
-    onSerieClick?: (serie: number) => void
+    onSerieClick?: (serie: number) => void;
+    activeSerie?: number;
 }
 
 export const Player: FC<PlayerProps> = ({
@@ -24,7 +25,8 @@ export const Player: FC<PlayerProps> = ({
     poster,
     videoQuality,
     series,
-    onSerieClick
+    onSerieClick,
+    activeSerie
 }) => {
     return (
         <div
@@ -41,33 +43,41 @@ export const Player: FC<PlayerProps> = ({
                     }
                 }}
             />
-            {series && <motion.div
-                initial={{
-                    opacity: 1
-                }}
-                whileHover={{
-                    opacity: 1
-                }}
-            >
-                <div className={styles.playerSeriesContainer}>
-                    {new Array(series.end).fill(undefined).map((serie, index) => {
-                        const normalizeSerie = (serie || 1) + index;
-                        
-                        const handleClick = () =>
-                            (typeof onSerieClick !== "undefined" && typeof onSerieClick === "function")
-                            && onSerieClick(normalizeSerie);
+            {series &&
+                <motion.div
+                    initial={{
+                        opacity: 1
+                    }}
+                    animate={{
+                        opacity: 0
+                    }}
+                    whileHover={{
+                        opacity: 1
+                    }}
+                    className={styles.playerMotionSeries}
+                >
+                    <Row className={styles.playerSeriesContainer}>
+                        {new Array(series.end).fill(undefined).map((serie, index) => {
+                            const normalizeSerie = (serie || 1) + index;
 
-                        return (
-                            <div
-                                key={`serie_${serie}`}
-                                onClick={handleClick}
-                            >
-                                {normalizeSerie} серия
-                            </div>
-                        )
-                    })}
-                </div>
-            </motion.div>}
+                            const handleClick = () =>
+                                (typeof onSerieClick !== "undefined" && typeof onSerieClick === "function")
+                                && onSerieClick(normalizeSerie);
+
+                            return (
+                                <Col
+                                    span={8}
+                                    key={`serie_${serie}`}
+                                    onClick={handleClick}
+                                    className={activeSerie === normalizeSerie ? styles.activeSerie : undefined}
+                                >
+                                    {normalizeSerie} серия
+                                </Col>
+                            )
+                        })}
+                    </Row>
+                </motion.div>
+            }
         </div>
     )
 }
