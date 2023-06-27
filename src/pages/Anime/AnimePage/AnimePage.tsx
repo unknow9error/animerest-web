@@ -1,18 +1,34 @@
-import { Col, Divider, Image, Row } from "antd";
+import { Col, Image, Row, Tabs } from "antd";
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { withBackground } from "src/hoc/Three/withBackground";
-import { AnilibriaAnimeVm } from "src/models";
 import { useLazyGetByIdQuery } from "src/services/Anime/Anime.service";
+import styles from "./AnimePage.module.scss";
 import { Player } from "src/shared/Video";
-import styles from './AnimePage.module.scss';
 
 const AnimePage: FC = () => {
     const [getById, { data, isError }] = useLazyGetByIdQuery();
-    const [animeData, setAnimeData] = useState<AnilibriaAnimeVm>();
-    const [activeSerie, setActiveSerie] = useState(1);
+    const [activeSerie, setActiveSerie] = useState<string>();
+
+    const [activeVoiceover, setActiveVoiceover] = useState("");
 
     const params = useParams();
+
+    useEffect(() => {
+        if (data) {
+            const voiceover = Object.keys(data.playlist)[0];
+
+            if (voiceover) {
+                setActiveVoiceover(voiceover);
+            }
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (activeVoiceover && data && data.playlist[activeVoiceover]) {
+            setActiveSerie(data.playlist[activeVoiceover][0].episode);
+        }
+    }, [activeVoiceover]);
 
     useEffect(() => {
         if (params.id) {
@@ -20,30 +36,25 @@ const AnimePage: FC = () => {
         }
     }, []);
 
-    useEffect(() => {
-        setAnimeData(data);
-    }, [data]);
-
     const handleSelectSerie = (serie: number) => {
-        setActiveSerie(serie)
-    }
+        setActiveSerie(String(serie));
+    };
+
+    const handleActvieKeyChange = (activeKey: string) => {
+        setActiveVoiceover(activeKey);
+    };
 
     return (
         <Row>
             <Col span={24}>
-                {data &&
-                    <Row
-                        justify="center"
-                    >
-                        <Col span={14}>
+                {data && (
+                    <Row justify="center">
+                        <Col span={24}>
                             <Row
                                 gutter={[50, 10]}
                                 className={styles.animeWrapper}
                             >
-                                <Col
-                                    span={7}
-                                    className={styles.animeContainer}
-                                >
+                                <Col span={7} className={styles.animeContainer}>
                                     <div>
                                         <Image src={data.poster} />
                                     </div>
@@ -53,10 +64,10 @@ const AnimePage: FC = () => {
                                     className={styles.animeContainer}
                                 >
                                     <h1>
-                                        {data.names.ru} <br />
-                                        ({data.year} года)
+                                        {data.name.ru} <br />
+                                        {/* ({data.year} года) */}
                                     </h1>
-                                    <h4>{data.names.en}</h4>
+                                    <h4>{data.name.en}</h4>
                                     <h2>Об аниме</h2>
                                     {/* <Divider
                                         type="horizontal"
@@ -64,19 +75,25 @@ const AnimePage: FC = () => {
                                     /> */}
                                     <Row gutter={40}>
                                         <Col span={3}>
-                                            <span>Жанры</span>
+                                            {/* <span>Жанры</span>
                                             <span>Серии</span>
                                             <span>Озвучка</span>
                                             <span>Декор</span>
-                                            <span>Озвучка</span>
+                                            <span>Озвучка</span> */}
                                             <span>Описание</span>
                                         </Col>
                                         <Col span={21}>
-                                            <span>{data.genres.join(", ")}</span>
+                                            {/* <span>
+                                                {data.genres.join(", ")}
+                                            </span>
                                             <span>{data.series}</span>
                                             <span>{data.voiceOver}</span>
-                                            <span>{data.team.decor.join(", ")}</span>
-                                            <span>{data.team.voice.join(", ")}</span>
+                                            <span>
+                                                {data.team.decor.join(", ")}
+                                            </span>
+                                            <span>
+                                                {data.team.voice.join(", ")}
+                                            </span> */}
                                             <span>{data.description}</span>
                                         </Col>
                                     </Row>
@@ -87,24 +104,83 @@ const AnimePage: FC = () => {
                                     span={24}
                                     className={styles.animePlayerWrapper}
                                 >
-                                    <Player
-                                        activeSerie={activeSerie}
-                                        poster={data.player.playlist[activeSerie].preview}
-                                        videoQuality={data.player.playlist[activeSerie].hls}
-                                        series={{
-                                            start: Number(data.series.split("-")[0]),
-                                            end: Number(data.series.split("-")[1]),
-                                        }}
-                                        onSerieClick={handleSelectSerie}
-                                    />
+                                    <Tabs
+                                        className={styles.voiceOver}
+                                        activeKey={activeVoiceover}
+                                        onChange={handleActvieKeyChange}
+                                    >
+                                        {Object.keys(data.playlist).map(
+                                            (voiceover) => {
+                                                const activePlaylist =
+                                                    data.playlist[
+                                                        activeVoiceover
+                                                    ];
+                                                const serie =
+                                                    activePlaylist?.find(
+                                                        (x) =>
+                                                            String(
+                                                                x.episode
+                                                            ) ===
+                                                            String(activeSerie)
+                                                    );
+
+                                                if (activePlaylist) {
+                                                    const start = Number(
+                                                        activePlaylist[
+                                                            activePlaylist.length -
+                                                                1
+                                                        ].episode
+                                                    );
+
+                                                    const end = Number(
+                                                        activePlaylist[0]
+                                                            .episode
+                                                    );
+                                                    debugger
+
+                                                    if (
+                                                        !isNaN(start) &&
+                                                        !isNaN(end)
+                                                    )
+                                                        return (
+                                                            <Tabs.TabPane
+                                                                tab={voiceover}
+                                                                key={voiceover}
+                                                            >
+                                                                <Player
+                                                                    activeSerie={Number(
+                                                                        activeSerie
+                                                                    )}
+                                                                    poster={
+                                                                        serie?.preview
+                                                                    }
+                                                                    videoQuality={
+                                                                        serie?.hls
+                                                                    }
+                                                                    series={{
+                                                                        start,
+                                                                        end:
+                                                                            start -
+                                                                            end,
+                                                                    }}
+                                                                    onSerieClick={
+                                                                        handleSelectSerie
+                                                                    }
+                                                                />
+                                                            </Tabs.TabPane>
+                                                        );
+                                                }
+                                            }
+                                        )}
+                                    </Tabs>
                                 </Col>
                             </Row>
                         </Col>
                     </Row>
-                }
+                )}
             </Col>
         </Row>
-    )
-}
+    );
+};
 
 export default withBackground(AnimePage);

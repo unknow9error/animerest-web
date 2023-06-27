@@ -8,7 +8,7 @@ export const AccountApiConstants = {
 export const AnimeApiConstants = {
     BASE: '/api/anime',
     GETLIST: '',
-    GETBYID: '/title',
+    GETBYID: '/',
     GENRES: '/genres',
     ACTION: '/action',
     SEARCH: '/search'

@@ -11,26 +11,33 @@ import { AnimeList } from "../AnimeList/AnimeList";
 const MainPage: FC = () => {
     const [getAll, { data }] = useLazyGetListQuery();
     const [_, setFilters] = useState<AnimeSearchTitleVm>();
-    const searchData = useSelector((state: RootState) => state.animeService)
+    const searchData = useSelector((state: RootState) => state.animeService);
 
+    console.log(data);
     useEffect(() => {
-        const query = getAll({
-            page: 1,
-            size: 100
-        })
+        const query = getAll({});
 
         return () => {
             query.abort();
-        }
+        };
     }, []);
 
-
-    const handleFilter = ({ name, value }: { name: keyof AnimeSearchTitleVm, value: string }) => {
-        setFilters(prev => prev ? ({
-            ...prev,
-            [name]: value
-        }) : ({ [name]: value }));
-    }
+    const handleFilter = ({
+        name,
+        value,
+    }: {
+        name: keyof AnimeSearchTitleVm;
+        value: string;
+    }) => {
+        setFilters((prev) =>
+            prev
+                ? {
+                      ...prev,
+                      [name]: value,
+                  }
+                : { [name]: value }
+        );
+    };
 
     return (
         <Row>
@@ -38,24 +45,24 @@ const MainPage: FC = () => {
                 <AnimeList
                     title="Новинки"
                     data={
-                        Array.isArray(searchData) && searchData.length > 0 ?
-                            searchData :
-                            data
+                        Array.isArray(searchData) && searchData.length > 0
+                            ? searchData
+                            : data
                     }
                 />
                 <AnimeFilter onFilter={handleFilter} />
                 <AnimeList
                     title="Лучшие"
                     data={
-                        Array.isArray(searchData) && searchData.length > 0 ?
-                            searchData :
-                            data
+                        Array.isArray(searchData) && searchData.length > 0
+                            ? searchData
+                            : data
                     }
                 />
             </Col>
             {/* <MainTabs /> */}
         </Row>
-    )
-}
+    );
+};
 
 export default withBackground(MainPage);

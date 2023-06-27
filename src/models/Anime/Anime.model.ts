@@ -1,6 +1,4 @@
-export interface AnimeVm {
-
-}
+export interface AnimeVm {}
 
 export interface AnimeActionVm {
     action: string;
@@ -28,44 +26,51 @@ export interface AnimeSearchTitleVm {
     timing?: string;
 }
 
-export interface AnilibriaAnimeVm {
-    code: string;
-    createdDate: Date;
-    description: string;
-    genres: string[];
-    team: {
-        voice: string[];
-        editing: string[]
-        decor: string[];
-        translator: string[];
-    };
-    voiceOver: string;
+export interface AnimeDto {
     id: number;
-    names: {
-        ru: string;
-        kz: string;
-        en: string;
-    };
-    poster: string;
-    year: string;
+    code: string;
+    animeId: number;
+    name: AnimeName;
+    description: string;
     series: string;
-    player: {
-        host: string;
-        playlist: {
-            [key in string]: {
-                created_timestamp: Date;
-                hls: {
-                    fhd: string;
-                    hd: string;
-                    sd: string;
-                };
-                preview: string;
-                serie: string;
-                skips: {
-                    ending: string[];
-                    opening: string[];
-                };
-            }
-        }
-    }
+    playlist: AnimePlaylistDto;
+    poster: string;
+}
+
+export type AnimePlaylistDto = Record<string, AnimePlaylistDataDto[]>;
+
+export interface AnimePlaylistDataDto {
+    kind: AlternativeFilterKind;
+    preview?: string;
+    name: Partial<AnimeName> | null;
+    episode: string;
+    hls: AnilibriaHLS;
+}
+
+export interface AnilibriaHLS {
+    fhd: string;
+    hd: string;
+    sd: string;
+}
+
+export enum AlternativeFilterKind {
+    Raw = "оригинал",
+    Dubs = "озвучка",
+    Subs = "субтитры",
+}
+
+export interface AnilibriaAnimeVm {
+    id: number;
+    code: string;
+    animeId: number;
+    name: AnimeName;
+    kind: AlternativeFilterKind;
+    poster: string;
+    url: string;
+    voiceover: string;
+}
+
+export interface AnimeName {
+    ru: string;
+    en: string;
 }
